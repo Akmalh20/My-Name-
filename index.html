@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mandarin Mobile - Suara Pintar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        body { 
+            font-family: 'Fredoka', sans-serif; 
+            background-color: #f8fafc;
+            touch-action: manipulation;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .pinyin { transition: opacity 0.2s ease; }
+        .pinyin.hidden-pinyin { display: none; }
+        
+        /* Ensure input doesn't zoom on focus in iOS */
+        input { font-size: 16px !important; }
+        
+        /* Mobile Specific Adjustments */
+        @media (max-width: 400px) {
+            .hanzi-text { font-size: 1.5rem !important; }
+            .play-btn { width: 3.5rem !important; height: 3.5rem !important; }
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 md:p-8">
+
+    <div class="max-w-md mx-auto bg-white rounded-[2.5rem] shadow-xl overflow-hidden border-4 sm:border-8 border-indigo-600">
+        
+        <!-- Header Section -->
+        <div class="bg-indigo-600 p-4 sm:p-5 text-white">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-star text-yellow-300"></i>
+                    <h1 id="ui-main-title" class="font-bold text-base sm:text-lg uppercase tracking-tight">Mandarin Cilik</h1>
+                </div>
+                <div class="flex gap-1 sm:gap-2">
+                    <button onclick="togglePinyin()" id="pinyin-toggle-btn" class="bg-indigo-800 px-2 py-1 rounded-lg text-[10px] font-bold border border-indigo-400">
+                        PINYIN: ON
+                    </button>
+                    <button onclick="toggleLanguage()" class="bg-white text-indigo-600 px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm">
+                        <span id="ui-lang-btn">ENGLISH</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex bg-indigo-50 border-b-2 border-indigo-100">
+            <button onclick="showTab('maksud')" id="tab-maksud" class="tab-btn flex-1 py-3 font-bold text-indigo-800 border-b-4 border-indigo-600 bg-white text-sm">
+                <span data-ms="Belajar" data-en="Learn">Belajar</span>
+            </button>
+            <button onclick="showTab('ayat')" id="tab-ayat" class="tab-btn flex-1 py-3 font-bold text-indigo-400 text-sm">
+                <span data-ms="Ayat" data-en="Sentences">Ayat</span>
+            </button>
+            <button onclick="showTab('kuiz')" id="tab-kuiz" class="tab-btn flex-1 py-3 font-bold text-indigo-400 text-sm">
+                <span data-ms="Kuiz" data-en="Quiz">Kuiz</span>
+            </button>
+        </div>
+
+        <div class="p-4 sm:p-6">
+            
+            <!-- Tab 1: Maksud -->
+            <div id="maksud" class="tab-content active space-y-3">
+                <div class="grid gap-2">
+                    <div onclick="speakMandarin('我')" class="active:scale-95 cursor-pointer p-4 bg-blue-50 border-2 border-blue-100 rounded-2xl flex items-center justify-between transition-all">
+                        <div class="flex flex-col">
+                            <span class="text-4xl font-bold text-blue-600">我</span>
+                            <span class="pinyin text-blue-400 font-bold text-sm">Wǒ</span>
+                        </div>
+                        <p class="text-lg font-bold text-blue-800" data-ms="Saya" data-en="I / Me">Saya</p>
+                    </div>
+                    <div onclick="speakMandarin('你')" class="active:scale-95 cursor-pointer p-4 bg-orange-50 border-2 border-orange-100 rounded-2xl flex items-center justify-between transition-all">
+                        <div class="flex flex-col">
+                            <span class="text-4xl font-bold text-orange-600">你</span>
+                            <span class="pinyin text-orange-400 font-bold text-sm">Nǐ</span>
+                        </div>
+                        <p class="text-lg font-bold text-orange-800" data-ms="Awak" data-en="You">Awak</p>
+                    </div>
+                    <div onclick="speakMandarin('他')" class="active:scale-95 cursor-pointer p-4 bg-purple-50 border-2 border-purple-200 rounded-2xl flex items-center justify-between transition-all">
+                        <div class="flex flex-col">
+                            <span class="text-4xl font-bold text-purple-600">他</span>
+                            <span class="pinyin text-purple-400 font-bold text-sm">Tā</span>
+                        </div>
+                        <p class="text-lg font-bold text-purple-800" data-ms="Dia" data-en="He / She">Dia</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Ayat -->
+            <div id="ayat" class="tab-content space-y-6">
+                
+                <!-- Nama Section -->
+                <div class="space-y-2">
+                    <div class="bg-white p-3 rounded-xl border border-pink-100 shadow-sm flex justify-between items-center">
+                        <div>
+                            <p class="text-xl font-bold text-gray-800">你叫什么名字？</p>
+                            <p class="pinyin text-xs text-pink-400 font-bold italic">Nǐ jiào shénme míngzì?</p>
+                        </div>
+                        <button onclick="speakMandarin('你叫什么名字？')" class="text-pink-400 p-2"><i class="fas fa-volume-up text-xl"></i></button>
+                    </div>
+
+                    <div class="bg-pink-500 p-4 rounded-3xl shadow-lg border-b-4 border-pink-700">
+                        <p class="pinyin text-pink-100 text-[10px] font-bold mb-1 ml-1 uppercase">Pinyin: Wǒ jiào [Nama] .</p>
+                        <div class="flex items-center gap-2">
+                            <span class="hanzi-text text-2xl font-bold text-white shrink-0">我叫</span>
+                            <input type="text" id="name-input" placeholder="..." class="min-w-0 flex-1 bg-white/20 border-b-2 border-white text-white font-bold px-2 py-1 outline-none rounded-t-md">
+                            <button onclick="speakResponseName()" class="play-btn bg-white text-pink-600 w-12 h-12 rounded-2xl shadow-md flex items-center justify-center shrink-0 active:scale-90 transition-transform">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Umur Section -->
+                <div class="space-y-2">
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100 shadow-sm flex justify-between items-center">
+                        <div>
+                            <p class="text-xl font-bold text-gray-800">你今年几岁？</p>
+                            <p class="pinyin text-xs text-emerald-400 font-bold italic">Nǐ jīnnián jǐ suì?</p>
+                        </div>
+                        <button onclick="speakMandarin('你今年几岁？')" class="text-emerald-400 p-2"><i class="fas fa-volume-up text-xl"></i></button>
+                    </div>
+
+                    <div class="bg-emerald-500 p-4 rounded-3xl shadow-lg border-b-4 border-emerald-700">
+                        <p class="pinyin text-emerald-100 text-[10px] font-bold mb-1 ml-1 uppercase">Pinyin: Wǒ jīnnián [Umur] suì .</p>
+                        <div class="flex items-center gap-2">
+                            <span class="hanzi-text text-2xl font-bold text-white shrink-0">我今年</span>
+                            <input type="number" id="age-input" placeholder="?" class="min-w-0 w-16 bg-white/20 border-b-2 border-white text-white font-bold px-2 py-1 outline-none rounded-t-md text-center">
+                            <span class="hanzi-text text-2xl font-bold text-white shrink-0">岁。</span>
+                            <button onclick="speakResponseAge()" class="play-btn bg-white text-emerald-600 w-12 h-12 rounded-2xl shadow-md flex items-center justify-center shrink-0 active:scale-90 transition-transform">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Kuiz -->
+            <div id="kuiz" class="tab-content text-center space-y-4">
+                <div class="bg-indigo-50 py-10 px-4 rounded-[2rem] border-2 border-indigo-100">
+                    <h2 id="quiz-q" class="text-7xl font-bold text-indigo-600">我</h2>
+                    <p id="quiz-pinyin" class="pinyin text-lg text-indigo-300 mt-2 font-bold uppercase">Wǒ</p>
+                </div>
+                <div id="quiz-options" class="grid gap-2"></div>
+            </div>
+        </div>
+
+        <div class="p-3 bg-gray-50 text-center border-t border-gray-100">
+            <p class="text-[10px] text-gray-400 font-bold uppercase" data-ms="Dengar sebutan dengan menekan butang main" data-en="Listen to pronunciation by tapping play">Dengar sebutan dengan menekan butang main</p>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ms';
+        let isPinyinVisible = true;
+        const synth = window.speechSynthesis;
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ms' ? 'en' : 'ms';
+            document.getElementById('ui-lang-btn').innerText = currentLang === 'en' ? "MALAY" : "ENGLISH";
+            document.getElementById('ui-main-title').innerText = currentLang === 'en' ? "Mandarin Kids" : "Belajar Mandarin";
+            document.querySelectorAll('[data-ms]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+            if(document.getElementById('kuiz').classList.contains('active')) initQuiz();
+        }
+
+        function togglePinyin() {
+            isPinyinVisible = !isPinyinVisible;
+            document.getElementById('pinyin-toggle-btn').innerText = `PINYIN: ${isPinyinVisible ? 'ON' : 'OFF'}`;
+            document.querySelectorAll('.pinyin').forEach(p => {
+                p.classList.toggle('hidden-pinyin', !isPinyinVisible);
+            });
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('text-indigo-800', 'border-b-4', 'border-indigo-600', 'bg-white');
+                b.classList.add('text-indigo-400');
+            });
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.add('text-indigo-800', 'border-b-4', 'border-indigo-600', 'bg-white');
+            activeBtn.classList.remove('text-indigo-400');
+            if(tabId === 'kuiz') initQuiz();
+        }
+
+        function speakMandarin(text, callback) {
+            synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN';
+            utter.rate = 0.7;
+            if (callback) utter.onend = callback;
+            synth.speak(utter);
+        }
+
+        function speakEnglish(text, callback) {
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 0.85;
+            if (callback) utter.onend = callback;
+            synth.speak(utter);
+        }
+
+        function speakResponseName() {
+            const name = document.getElementById('name-input').value.trim();
+            if(!name) { speakMandarin("我叫"); return; }
+            speakMandarin("我叫", () => {
+                speakEnglish(name);
+            });
+        }
+
+        function speakResponseAge() {
+            const age = document.getElementById('age-input').value.trim();
+            if(!age) { speakMandarin("我今年"); return; }
+            speakMandarin("我今年" + age + "岁");
+        }
+
+        const questions = [
+            { q: "我", p: "Wǒ", a: {ms: "Saya", en: "I"}, opts: [{ms:"Saya", en:"I"}, {ms:"Awak", en:"You"}, {ms:"Dia", en:"He"}] },
+            { q: "你", p: "Nǐ", a: {ms: "Awak", en: "You"}, opts: [{ms:"Saya", en:"I"}, {ms:"Awak", en:"You"}, {ms:"Dia", en:"He"}] },
+            { q: "他", p: "Tā", a: {ms: "Dia", en: "He"}, opts: [{ms:"Saya", en:"I"}, {ms:"Awak", en:"You"}, {ms:"Dia", en:"He"}] }
+        ];
+
+        let qIdx = 0;
+        function initQuiz() {
+            const q = questions[qIdx];
+            document.getElementById('quiz-q').innerText = q.q;
+            document.getElementById('quiz-pinyin').innerText = q.p;
+            const optContainer = document.getElementById('quiz-options');
+            optContainer.innerHTML = '';
+            q.opts.forEach(o => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3 bg-white border-2 border-indigo-100 rounded-xl font-bold text-indigo-700 active:bg-indigo-600 active:text-white transition-colors text-sm shadow-sm";
+                btn.innerText = o[currentLang];
+                btn.onclick = () => {
+                    if (o[currentLang] === q.a[currentLang]) {
+                        btn.innerHTML = "✨ BETUL! ✨";
+                        btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                        setTimeout(() => { qIdx = (qIdx + 1) % questions.length; initQuiz(); }, 1000);
+                    } else {
+                        btn.innerHTML = "❌ CUBA LAGI";
+                        btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                        setTimeout(() => { btn.innerText = o[currentLang]; btn.classList.remove('bg-red-500', 'text-white', 'border-red-600'); }, 800);
+                    }
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+    </script>
+</body>
+</html>
+
